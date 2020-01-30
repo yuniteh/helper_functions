@@ -116,14 +116,17 @@ classdef Violin < handle
 
             % calculate kernel density estimation for the violin
             [density, value] = ksdensity(data, 'bandwidth', args.Bandwidth);
-            density = density(value >= min(data) & value <= max(data));
-            value = value(value >= min(data) & value <= max(data));
-            value(1) = min(data);
-            value(end) = max(data);
+            
+            %UNCOMMENT BELOW TO CLIP VIOLINS
+            %density = density(value >= min(data) & value <= max(data));
+            %value = value(value >= min(data) & value <= max(data));
+            %value(1) = min(data);
+            %value(end) = max(data);
 
             % all data is identical
             if min(data) == max(data)
                 density = 1;
+                value = max(data);
             end
 
             width = args.Width/max(density);
@@ -137,18 +140,23 @@ classdef Violin < handle
             jitter = 2*(rand(size(data))-0.5);
             obj.ScatterPlot = ...
                 scatter(pos + jitter.*jitterstrength, data, 'filled');
-
+            
+            assignin('base','test',[value value(end:-1:1)])
             % plot the violin
             obj.ViolinPlot =  ... % plot color will be overwritten later
                 fill([pos+density*width pos-density(end:-1:1)*width], ...
                      [value value(end:-1:1)], [1 1 1]);
+            obj.ViolinPlot.LineWidth = args.LineWidth;
 
             % plot the mini-boxplot within the violin
             quartiles = quantile(data, [0.25, 0.5, 0.75]);         
-            obj.BoxPlot = ... % plot color will be overwritten later
-                fill(pos+[-1,1,1,-1]*args.BoxWidth, ...
-                     [quartiles(1) quartiles(1) quartiles(3) quartiles(3)], ...
-                     [1 1 1]);
+%             obj.BoxPlot = ... % plot color will be overwritten later
+%                 fill(pos+[-1,1,1,-1]*args.BoxWidth, ...
+%                      [quartiles(1) quartiles(1) quartiles(3) quartiles(3)], ...
+%                      [1 1 1]);
+            obj.BoxPlot = rectangle('Position',[pos-args.BoxWidth quartiles(1)...
+                2*args.BoxWidth quartiles(3)-quartiles(1)],...
+                'Curvature',[.4 .1]);
                  
             % plot the data mean
             meanValue = mean(data);
@@ -171,6 +179,7 @@ classdef Violin < handle
             hiwhisker = min(hiwhisker, max(data(data < hiwhisker)));
             if ~isempty(lowhisker) && ~isempty(hiwhisker)
                 obj.WhiskerPlot = plot([pos pos], [lowhisker hiwhisker]);
+                obj.WhiskerPlot.LineWidth = args.LineWidth;
             end
             obj.MedianPlot = scatter(pos, quartiles(2), [], [1 1 1], 'filled');
 
@@ -186,7 +195,7 @@ classdef Violin < handle
             obj.BoxWidth = args.BoxWidth;
             obj.MedianColor = args.MedianColor;
             if not(isempty(args.ViolinColor))
-                obj.ViolinColor = args.ViolinColor;
+                obj.ViolinColor = args.ViolinColor(pos,:);
             else
                 obj.ViolinColor = obj.ScatterPlot.CData;
             end
@@ -239,13 +248,14 @@ classdef Violin < handle
         
         function set.BoxWidth(obj,width)
             if ~isempty(obj.BoxPlot)
-                pos=mean(obj.BoxPlot.XData);
-                obj.BoxPlot.XData=pos+[-1,1,1,-1]*width;
+%                 pos=mean(obj.BoxPlot.XData);
+%                 obj.BoxPlot.XData=pos+[-1,1,1,-1]*width;
             end
         end
         
         function width = get.BoxWidth(obj)
-            width=max(obj.BoxPlot.XData)-min(obj.BoxPlot.XData);
+            width = obj.BoxPlot.Position(3);
+%             width=max(obj.BoxPlot.XData)-min(obj.BoxPlot.XData);
         end
 
         function set.ViolinColor(obj, color)
@@ -259,7 +269,7 @@ classdef Violin < handle
         end
 
         function set.ViolinAlpha(obj, alpha)
-            obj.ScatterPlot.MarkerFaceAlpha = alpha;
+            %obj.ScatterPlot.MarkerFaceAlpha = alpha;
             obj.ViolinPlot.FaceAlpha = alpha;
         end
 
@@ -325,10 +335,11 @@ classdef Violin < handle
             p.addParameter('Width', 0.3, isscalarnumber);
             p.addParameter('Bandwidth', [], isscalarnumber);
             iscolor = @(x) (isnumeric(x) & length(x) == 3);
-            p.addParameter('ViolinColor', [], iscolor);
-            p.addParameter('BoxColor', [0.5 0.5 0.5], iscolor);
-            p.addParameter('BoxWidth', 0.01, isscalarnumber);
-            p.addParameter('EdgeColor', [0.5 0.5 0.5], iscolor);
+            p.addParameter('ViolinColor', [], @isnumeric);
+            p.addParameter('BoxColor', [.2 .2 .2], iscolor);
+            p.addParameter('BoxWidth', 0.04, isscalarnumber);
+            p.addParameter('EdgeColor', [.2 .2 .2], iscolor);
+            p.addParameter('LineWidth', 1.5, isscalarnumber);
             p.addParameter('MedianColor', [1 1 1], iscolor);
             p.addParameter('ViolinAlpha', 0.3, isscalarnumber);
             isscalarlogical = @(x) (islogical(x) & isscalar(x));
