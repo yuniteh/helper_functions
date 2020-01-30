@@ -354,13 +354,12 @@ classdef Violin < handle
                 else
                     pos = obj.BoxPlot.Position(1);
                     obj.ViolinPlot.Visible = 'off';
-                    %obj.BoxPlot.Position(1) = pos-.2;
-                    %obj.MedianPlot.XData = pos-.2+obj.BoxPlot.Position(3)/2;
-                    %obj.WhiskerPlot.XData = [pos-.2+obj.BoxPlot.Position(3)/2 ...
-                    %    pos-.2+obj.BoxPlot.Position(3)/2];
-                    jitter = obj.ScatterPlot.XData - round(obj.ScatterPlot.XData);
-                    jitter = (jitter - min(jitter))/2;
-                    obj.ScatterPlot.XData = jitter+pos+.1+obj.BoxPlot.Position(3);
+                    obj.BoxPlot.Position(1) = pos-.2;
+                    obj.MedianPlot.XData = pos-.2+obj.BoxPlot.Position(3)/2;
+                    obj.WhiskerPlot.XData = [pos-.2+obj.BoxPlot.Position(3)/2 ...
+                        pos-.2+obj.BoxPlot.Position(3)/2];
+                    jitter = abs(obj.ScatterPlot.XData - round(obj.ScatterPlot.XData));
+                    obj.ScatterPlot.XData = ;
                 end
             end
         end
