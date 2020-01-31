@@ -109,6 +109,10 @@ classdef Violin < handle
             %                    Defaults to false
             
             args = obj.checkInputs(data, pos, varargin{:});
+            ind = pos;
+            if not(isempty(args.PosSpec))
+                pos = args.PosSpec(ind);
+            end
             data = data(not(isnan(data)));
             if numel(data) == 1
                 obj.MedianPlot = scatter(pos, data, 'filled');
@@ -212,7 +216,7 @@ classdef Violin < handle
             obj.BoxWidth = args.BoxWidth;
             obj.MedianColor = args.MedianColor;
             if not(isempty(args.ViolinColor))
-                obj.ViolinColor = args.ViolinColor(pos,:);
+                obj.ViolinColor = args.ViolinColor(ind,:);
             else
                 obj.ViolinColor = obj.ScatterPlot.CData;
             end
@@ -453,6 +457,7 @@ classdef Violin < handle
             p.addParameter('Min',[], isscalarnumber);
             p.addParameter('ShowBox', true, isscalarlogical);
             p.addParameter('ShowViolin', true, isscalarlogical);
+            p.addParameter('PosSpec', [], @isnumeric);
             
             p.parse(data, pos, varargin{:});
             results = p.Results;
