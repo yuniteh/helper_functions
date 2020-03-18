@@ -4,4 +4,5 @@ function d = modmahal(X,Y)
     Y_m = mean(Y);
     cov_XY = (cov(X) + cov(Y))./2;
     d = 0.5*sqrt((X_m - Y_m)*(cov_XY\(X_m - Y_m)'));
-end
+end 
+

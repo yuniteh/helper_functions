@@ -9,8 +9,8 @@ function stdshade(amean, astd,alpha,acolor,F,style,smth)
 % smusall 2010/4/23
 
 amatrix = amean;
-%amean = amean'; % added 07/11 yuniteh
-%astd = astd'; %added 07/11 yuniteh
+% amean = amean'; % added 07/11 yuniteh
+% astd = astd'; %added 07/11 yuniteh
 
 if exist('acolor','var')==0 || isempty(acolor)
     acolor='r'; 
@@ -36,11 +36,11 @@ end
 %astd=nanstd(amatrix); % to get std shading
 % astd=nanstd(amatrix)/sqrt(size(amatrix,1)); % to get sem shading
 
-
 if exist('alpha','var')==0 || isempty(alpha) 
-    fill([F fliplr(F)],[amean+astd fliplr(amean-astd)],'color',acolor,'linestyle','none');
+    fill([F fliplr(F)],[amean+astd fliplr(amean-astd)],acolor,'linestyle','none');
     acolor='k';
-else fill([F fliplr(F)],[amean+astd fliplr(amean-astd)],acolor, 'FaceAlpha', alpha,'linestyle','none');    
+else
+    fill([F fliplr(F)],[amean+astd fliplr(amean-astd)],acolor, 'FaceAlpha', alpha,'linestyle','none');
 end
 
 if ishold==0

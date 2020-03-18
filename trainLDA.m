@@ -22,7 +22,7 @@ for i = 1:nClass
     muClass(i,:) = mean(traindata(ind,:));
     Sb = Sb+length(ind)*((muClass(i,:)-mu)'*(muClass(i,:)-mu));
     C = C + cov(traindata(ind,:));
-    %C2 = C2 + (1/(sum(ind)-1))*(traindata(ind,:)-ones(sum(ind),1)*muClass(i,:))'*(traindata(ind,:)-ones(sum(ind),1)*muClass(i,:));%cov(traindata(ind,:)) - ones(sum(ind),1)*mu);
+    %C = C + (1/(sum(ind)-1))*(traindata(ind,:)-ones(sum(ind),1)*muClass(i,:))'*(traindata(ind,:)-ones(sum(ind),1)*muClass(i,:));%cov(traindata(ind,:)) - ones(sum(ind),1)*mu);
     %C = C + ((traindata(ind,:))'*traindata(ind,:))/(sum(ind)-1);%cov(traindata(ind,:)) - ones(sum(ind),1)*mu);
 
 %     tempM = zeros(1,nFeat);
