@@ -12,7 +12,7 @@ switch type
     case 'box'
         plot([xleft xcap xright flip(xcap)],[yvals ycap flip(yvals) ybot],'LineWidth',1,'Color','k')
         fill([xleft xcap xright flip(xcap)],[yvals ycap flip(yvals) ybot],color)
-        alpha(0.8)
+%         alpha(0.8)
 %         plot(xright,yvals,'LineWidth',1,'Color',color)
         plot(xcap,[data data],'LineWidth',1,'Color','k')
     case 'line'
@@ -47,9 +47,9 @@ switch type
         y = [0, data];
         ycap = [data, data];
         ybot = [0, 0];
+        fill([xleft xcap xright flip(xcap)],[y ycap flip(y) ybot],color,'linestyle','none')
+%         alpha(0.8)
         plot([xleft xcap xright flip(xcap)],[y ycap flip(y) ybot],'LineWidth',1,'Color','k')
-        fill([xleft xcap xright flip(xcap)],[y ycap flip(y) ybot],color)
-        alpha(0.8)
         
         plot(xvals,yvals,'LineWidth',1,'color','k')
 end
