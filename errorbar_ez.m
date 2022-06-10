@@ -15,6 +15,15 @@ switch type
 %         alpha(0.8)
 %         plot(xright,yvals,'LineWidth',1,'Color',color)
         plot(xcap,[data data],'LineWidth',1,'Color','k')
+    case 'boxez'
+        yvals = [data, se];
+        ycap = [se, se];
+        ybot = [data, data];
+        plot([xleft xcap xright flip(xcap)],[yvals ycap flip(yvals) ybot],'LineWidth',1,'Color','k')
+        fill([xleft xcap xright flip(xcap)],[yvals ycap flip(yvals) ybot],color)
+        alpha(0.8)
+%         alpha(0.8)
+%         plot(xright,yvals,'LineWidth',1,'Color',color)
     case 'line'
         plot(xvals+.2,yvals,'LineWidth',1.5,'color','k')
         plot(x+.2,data,'.','MarkerSize',15,'color','k')

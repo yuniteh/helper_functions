@@ -72,7 +72,6 @@ pvd = [];
 fileNameOut = [];
 daqUINT16 = [];
 
-
 %% setup for processing both DAQ and PVD files
 % create the appropriate file names to process both the DAQ and PVD files,
 % when both are available, even when only one of them is provided
